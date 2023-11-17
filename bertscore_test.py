@@ -16,20 +16,22 @@
 '''
 
 
-
-import evaluate
+from evaluate import load
 
 def getBertscore(reference_sentences,generated_sentences):
-    bertscore = evaluate.load("./metrics/bertscore")
-    results = bertscore.compute(predictions=reference_sentences, references=generated_sentences, lang="zh", model_type = "bert-base-chinese")
+    bertscore = load("./metrics/bertscore")
+    # predictions = generated_sentences
+    # references = reference_sentences
+    results = bertscore.compute(predictions=generated_sentences, references=reference_sentences,lang="zh", model_type="bert-base-chinese")
     return results
 
 
 if __name__ == '__main__':
-    generated_sentences = ['This is a cat', 'This is a cat']
-    reference_sentences = ["that is a cat", 'dog']
-    result = getBertscore(reference_sentences,generated_sentences)
-    print(result)
+    generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
+    references = ["this is the small test","hello world", "你好","1", "你 好"]
+    results = getBertscore(references,generated_sentences)
+    print(results)
+
 
 
 

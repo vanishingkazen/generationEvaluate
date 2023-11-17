@@ -11,14 +11,14 @@
     'n_gram'：n_gram
 }
 '''
+# https://blog.csdn.net/rainy_universe/article/details/128493300
 from nltk.translate.chrf_score import chrf_precision_recall_fscore_support
-
 # precision准确率 , recall 召回率, fscore, tp(true positive)
 def get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence,n_gram_ls=[1]):
     result = []
     for n_gram in n_gram_ls:
         precision, recall, fscore, tp = chrf_precision_recall_fscore_support(
-            reference_sentence.split(), generated_sentence.split(),n=n_gram,epsilon=0.
+            reference_sentence, generated_sentence,n=n_gram,epsilon=0.,beta=2.0
         )
         result.append({
             'precision':precision,
@@ -30,8 +30,14 @@ def get_chrf_precision_recall_fscore_support(reference_sentence,generated_senten
     return result
 
 if __name__ == '__main__':
-    reference_sentence = "This is the reference sentence."
-    generated_sentence = "This is the generated sentence."
-    result =get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence,[1,2])
+    reference_sentence = 'yes'
+    generated_sentence = 'yeap'
+    result =get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence,[2])
     print(result)
+
+    # precision, recall, fscore, tp = chrf_precision_recall_fscore_support(
+    #     'the cat is on the mat. my name is kk.', 'the the the the the the the', n=1, beta=3.0
+    # )
+    # print('the cat is on the mat. my name is kk.'.split(), 'the the the the the the the'.split())
+    # print(precision, recall, fscore, tp)
 
