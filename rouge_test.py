@@ -13,8 +13,9 @@ def getRougescore(reference_sentences,generated_sentences,rouge_n='l'):
     return rouge_score[0]["rouge-{}".format(rouge_n)]['f']
 
 if __name__ == '__main__':
-    generated_sentences = ["我 是 一 个 男 孩"]
-    reference_sentences = ["你 是 一 个 男 孩"]
-    print(getRougescore(reference_sentences,generated_sentences))
+    pass
+    # generated_sentences = ["你"]
+    # reference_sentences = ["你"]
+    # print(getRougescore(reference_sentences,generated_sentences))
 
 

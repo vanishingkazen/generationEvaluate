@@ -3,7 +3,9 @@ from nltk.translate.chrf_score import chrf_precision_recall_fscore_support
 from evaluate import load
 
 
-def getRougescore(reference_sentence,generated_sentence,rouge_n='l',lang = 'zh'):
+def getRougeScore(reference_sentences, generated_sentences,
+                  rouge_n='l',
+                  lang='zh'):
     """
 
     :param reference_sentence: 传入一个str字符串
@@ -17,19 +19,27 @@ def getRougescore(reference_sentence,generated_sentence,rouge_n='l',lang = 'zh')
         reference_sentences = "你是一个男孩"
         print(getRougescore(reference_sentences, generated_sentences))
     """
-    if (lang == 'en'):
-        pass
-    elif (lang == 'zh'):
-        reference_sentence = " ".join(reference_sentence)
-        generated_sentence = " ".join(generated_sentence)
-    else:
-        raise Exception("para:lang type error")
+    # if reference_sentence == '' or generated_sentence == '':
+    #     raise Exception("the sentence is empty")
+    scores = []
+
 
     rouge = Rouge()
-    rouge_score = rouge.get_scores(generated_sentence, reference_sentence)
-    return rouge_score[0]["rouge-{}".format(rouge_n)]['f']
 
-def get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence,n_gram=3,beta=2):
+    for generated_sentence, reference_sentence in zip(generated_sentences, reference_sentences):
+        if lang == 'en':
+            pass
+        elif lang == 'zh':
+            reference_sentence = " ".join(reference_sentence)
+            generated_sentence = " ".join(generated_sentence)
+        else:
+            raise Exception("para:lang type error")
+        rouge_score = rouge.get_scores(generated_sentence, reference_sentence)
+        scores.append(rouge_score[0]["rouge-{}".format(rouge_n)]['f'])
+    return scores
+
+
+def getChrfScore(reference_sentences, generated_sentences, n_gram=3, beta=2):
     """
 
     :param reference_sentence: 传入一个str字符串
@@ -44,12 +54,16 @@ def get_chrf_precision_recall_fscore_support(reference_sentence,generated_senten
         result =get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence)
         print(result)
     """
-    precision, recall, fscore, tp = chrf_precision_recall_fscore_support(
-            reference_sentence, generated_sentence,n=n_gram,epsilon=0.,beta=beta
-    )
-    return fscore
+    fscores = []
+    for reference_sentence, generated_sentence in zip(reference_sentences, generated_sentences):
+        precision, recall, fscore, tp = chrf_precision_recall_fscore_support(
+            reference_sentence, generated_sentence, n=n_gram, epsilon=0., beta=beta
+        )
+        fscores.append(fscore)
+    return fscores
 
-def getBertscore(reference_sentences,generated_sentences):
+
+def getBertScore(reference_sentences, generated_sentences):
     """
     tip:使用此函数需要在此函数文件的同级目录下 1.创建模型文件夹"bert-base-chinese",模型文件夹内有三个文件分别是:config.json,pytorch_model.bin,vocab.txt
                                         2.需要evaluate的源码中的metrics文件夹中的脚本文件，可以在git中下载 https://github.com/huggingface/evaluate
@@ -64,27 +78,27 @@ def getBertscore(reference_sentences,generated_sentences):
     scoures = getBertscore(references,generated_sentences)
     print(scoures)
     """
+    if len(reference_sentences) == 0 or len(generated_sentences) == 0:
+        raise Exception("the sentences list is empty")
     bertscore = load("./metrics/bertscore")
-    # predictions = generated_sentences
-    # references = reference_sentences
-    results = bertscore.compute(predictions=generated_sentences, references=reference_sentences,lang="zh", model_type="bert-base-chinese")
+    results = bertscore.compute(predictions=generated_sentences, references=reference_sentences, lang="zh",
+                                model_type="bert-base-chinese")
     scores = results['f1']
     return scores
 
 
 if __name__ == '__main__':
-    pass
-    # reference_sentence = '你是小猫'
-    # generated_sentence = '你是小狗'
-    # result =get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence)
-    # print(result)
-    #
-    # generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
-    # references = ["this is the small test","hello world", "你好","1", "你 好"]
-    # scoures = getBertscore(references,generated_sentences)
-    # print(scoures)
-    #
-    # generated_sentences = "我是一个男孩"
-    # reference_sentences = "你是一个男孩"
-    # print(getRougescore(reference_sentences, generated_sentences))
+    # pass
+    reference_sentence = ['你是小猫',"我是一个男孩"]
+    generated_sentence = ['你是小狗',"你是一个女孩"]
+    result =getChrfScore(reference_sentence,generated_sentence)
+    print(result)
 
+    generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
+    references = ["this is the small test","hello world", "你好","1", "你 好"]
+    scoures = getBertScore(references,generated_sentences)
+    print(scoures)
+
+    generated_sentences = ["我是一个男孩", "你好","2", "你好"]
+    reference_sentences = ["你是一个男孩", "你好","1", "你 好"]
+    print(getRougeScore(reference_sentences, generated_sentences))
