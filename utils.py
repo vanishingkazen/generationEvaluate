@@ -7,7 +7,7 @@ def getRougeScore(reference_sentences, generated_sentences,
                   rouge_n='l',
                   lang='zh'):
     """
-
+    使用召回率直接作为分数
     :param reference_sentence: 传入一个str字符串
     :param generated_sentence: 传入一个str字符串
     :param rouge_n: 可选 '1','2','l',设置算法中的 n_gram=？ ,默认使用 rouge-l 的 lcs最长公共子序列的算法
@@ -19,11 +19,7 @@ def getRougeScore(reference_sentences, generated_sentences,
         reference_sentences = "你是一个男孩"
         print(getRougescore(reference_sentences, generated_sentences))
     """
-    # if reference_sentence == '' or generated_sentence == '':
-    #     raise Exception("the sentence is empty")
     scores = []
-
-
     rouge = Rouge()
 
     for generated_sentence, reference_sentence in zip(generated_sentences, reference_sentences):
@@ -35,7 +31,7 @@ def getRougeScore(reference_sentences, generated_sentences,
         else:
             raise Exception("para:lang type error")
         rouge_score = rouge.get_scores(generated_sentence, reference_sentence)
-        scores.append(rouge_score[0]["rouge-{}".format(rouge_n)]['f'])
+        scores.append(rouge_score[0]["rouge-{}".format(rouge_n)]['p'])
     return scores
 
 
