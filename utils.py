@@ -51,17 +51,18 @@ def get_chrf_precision_recall_fscore_support(reference_sentence,generated_senten
 
 def getBertscore(reference_sentences,generated_sentences):
     """
+    tip:使用此函数需要在此函数文件的同级目录下 1.创建模型文件夹"bert-base-chinese",模型文件夹内有三个文件分别是:config.json,pytorch_model.bin,vocab.txt
+                                        2.需要evaluate的源码中的metrics文件夹中的脚本文件，可以在git中下载 https://github.com/huggingface/evaluate
 
     :param reference_sentences: list,传入任意数量的字符串，注意数量要和 generated_sentences 中的数量保持一致
     :param generated_sentences: list,传入任意数量的字符串，注意数量要和 reference_sentences 中的数量保持一致
     :return: 返回分数列表，列表中分数元素的个数和 generated_sentences 中的元素数量相同
 
-    :demo
-        generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
-        references = ["this is the small test","hello world", "你好","1", "你 好"]
-        scoures = getBertscore(references,generated_sentences)
-        print(scoures)
-
+    demo：
+    generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
+    references = ["this is the small test","hello world", "你好","1", "你 好"]
+    scoures = getBertscore(references,generated_sentences)
+    print(scoures)
     """
     bertscore = load("./metrics/bertscore")
     # predictions = generated_sentences
