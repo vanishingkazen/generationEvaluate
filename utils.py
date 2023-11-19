@@ -82,19 +82,43 @@ def getBertScore(reference_sentences, generated_sentences):
     scores = results['f1']
     return scores
 
+def getScores(metrics:list,reference_sentences,generated_sentences):
+    # ALLmetrics = ['rouge','chrf','bertscore',]
+    result = {};
+    for metric in metrics:
+        if metric == 'rouge':
+            result['rouge'] = getRougeScore(reference_sentences,generated_sentences)
+        elif metric == 'chrf':
+            result['chrf'] = getChrfScore(reference_sentences,generated_sentences)
+        elif metric == 'bertscore':
+            result['bertscore'] = getBertScore(reference_sentences,generated_sentences)
+        else:
+            raise Exception('no such metric like {}'.format(metric))
+
+    return result
+
+
+
+
 
 if __name__ == '__main__':
     # pass
-    reference_sentence = ['你是小猫',"我是一个男孩"]
-    generated_sentence = ['你是小狗',"你是一个女孩"]
-    result =getChrfScore(reference_sentence,generated_sentence)
-    print(result)
+    # reference_sentence = ['你是小猫',"我是一个男孩"]
+    # generated_sentence = ['你是小狗',"你是一个女孩"]
+    # result =getChrfScore(reference_sentence,generated_sentence)
+    # print(result)
+    #
+    # generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
+    # references = ["this is the small test","hello world", "你好","1", "你 好"]
+    # scoures = getBertScore(references,generated_sentences)
+    # print(scoures)
+    #
+    # generated_sentences = ["我是一个男孩", "你好","2", "你好"]
+    # reference_sentences = ["你是一个男孩", "你好","1", "你 好"]
+    # print(getRougeScore(reference_sentences, generated_sentences))
 
     generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
     references = ["this is the small test","hello world", "你好","1", "你 好"]
-    scoures = getBertScore(references,generated_sentences)
-    print(scoures)
 
-    generated_sentences = ["我是一个男孩", "你好","2", "你好"]
-    reference_sentences = ["你是一个男孩", "你好","1", "你 好"]
-    print(getRougeScore(reference_sentences, generated_sentences))
+    metrics = ['rouge', 'chrf', 'bertscore', ]
+    print(getScores(metrics,references,generated_sentences))
