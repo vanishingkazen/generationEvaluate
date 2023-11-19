@@ -30,8 +30,8 @@ def get_chrf_precision_recall_fscore_support(reference_sentence,generated_senten
     return result
 
 if __name__ == '__main__':
-    reference_sentence = 'yes'
-    generated_sentence = 'yeap'
+    reference_sentence = '你 好'
+    generated_sentence = '你 好'
     result =get_chrf_precision_recall_fscore_support(reference_sentence,generated_sentence,[2])
     print(result)
 

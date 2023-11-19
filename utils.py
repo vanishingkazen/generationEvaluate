@@ -55,6 +55,8 @@ def getChrfScore(reference_sentences, generated_sentences,
     """
     fscores = []
     for reference_sentence, generated_sentence in zip(reference_sentences, generated_sentences):
+        if len(reference_sentence) < n_gram or len(generated_sentence) < n_gram:
+            raise Exception('length of reference_sentence or generated_sentences < n_gram')
         precision, recall, fscore, tp = chrf_precision_recall_fscore_support(
             reference_sentence, generated_sentence, n=n_gram, epsilon=0., beta=beta
         )
@@ -107,8 +109,8 @@ def getScores(metrics:list,reference_sentences,generated_sentences):
 
 if __name__ == '__main__':
     # pass
-    # reference_sentence = ['你是小猫',"我是一个男孩"]
-    # generated_sentence = ['你是小狗',"你是一个女孩"]
+    # reference_sentence = ['你是',"我是一个男孩"]
+    # generated_sentence = ['你是',"你是一个女孩"]
     # result =getChrfScore(reference_sentence,generated_sentence)
     # print(result)
     #
@@ -121,8 +123,8 @@ if __name__ == '__main__':
     # reference_sentences = ["你是一个男孩", "你好","1", "你 好"]
     # print(getRougeScore(reference_sentences, generated_sentences))
 
-    generated_sentences = ["this is a  test","hello world", "你好","2", "你好"]
-    references = ["this is the small test","hello world", "你好","1", "你 好"]
+    generated_sentences = ["the","hello world", "你好a", "你好a"]
+    references = ["the","hello world", "你好a", "你 好a"]
 
     metrics = ['rouge', 'chrf', 'bertscore', ]
     print(getScores(metrics,references,generated_sentences))
