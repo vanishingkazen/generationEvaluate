@@ -7,7 +7,7 @@ def getRougeScore(reference_sentences, generated_sentences,
                   rouge_n='l',
                   lang='zh'):
     """
-    使用召回率直接作为分数
+    基于我认得级别的召回率评估，使用召回率直接作为分数
     :param reference_sentence: 传入一个str字符串
     :param generated_sentence: 传入一个str字符串
     :param rouge_n: 可选 '1','2','l',设置算法中的 n_gram=？ ,默认使用 rouge-l 的 lcs最长公共子序列的算法
@@ -35,8 +35,11 @@ def getRougeScore(reference_sentences, generated_sentences,
     return scores
 
 
-def getChrfScore(reference_sentences, generated_sentences, n_gram=3, beta=2):
+def getChrfScore(reference_sentences, generated_sentences,
+                 n_gram=3,
+                 beta=2):
     """
+    基于字符级别的召回率和精准率，beta控制的是召回率和精准率对最后分数比重的影响，现已根据论文设置n_gram=3，beta=2 为最优,
 
     :param reference_sentence: 传入一个str字符串
     :param generated_sentence: 传入一个str字符串
@@ -81,6 +84,7 @@ def getBertScore(reference_sentences, generated_sentences):
                                 model_type="bert-base-chinese")
     scores = results['f1']
     return scores
+
 
 def getScores(metrics:list,reference_sentences,generated_sentences):
     # ALLmetrics = ['rouge','chrf','bertscore',]
