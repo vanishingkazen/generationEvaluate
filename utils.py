@@ -123,8 +123,12 @@ if __name__ == '__main__':
     # reference_sentences = ["你是一个男孩", "你好","1", "你 好"]
     # print(getRougeScore(reference_sentences, generated_sentences))
 
-    generated_sentences = ["the","hello world", "你好a", "你好a"]
-    references = ["the","hello world", "你好a", "你 好a"]
+    # generated_sentences = ["the","hello world", "你好a", "你好a"]
+    # references = ["the","hello world", "你好a", "你 好a"]
+    #
+    # metrics = ['rouge', 'chrf', 'bertscore', ]
+    # print(getScores(metrics,references,generated_sentences))、
 
-    metrics = ['rouge', 'chrf', 'bertscore', ]
-    print(getScores(metrics,references,generated_sentences))
+    import sys
+
+    print("Python Version {}".format(str(sys.version).replace('\n', '')))
